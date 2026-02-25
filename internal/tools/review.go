@@ -34,8 +34,14 @@ func NewReviewTool() mcp.Tool {
 }
 
 // HandleReview handles the quorum_review tool call.
-func HandleReview(cfg *config.Config) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+// Config is reloaded from disk on each call to support hot-reload.
+func HandleReview(_ *config.Config) func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	return func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		cfg, err := config.LoadDefault()
+		if err != nil {
+			return mcp.NewToolResultError(fmt.Sprintf("load config: %v", err)), nil
+		}
+
 		args := request.GetArguments()
 
 		content, _ := args["content"].(string)
