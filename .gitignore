@@ -1,0 +1,4 @@
+bin/
+dist/
+/quorum-cc
+*.exe
