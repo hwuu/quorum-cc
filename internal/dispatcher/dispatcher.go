@@ -97,5 +97,19 @@ func formatResults(results []Result) string {
 		}
 		parts = append(parts, section)
 	}
-	return strings.Join(parts, "\n\n---\n\n")
+
+	combined := strings.Join(parts, "\n\n---\n\n")
+
+	// Count successful reviews
+	successCount := 0
+	for _, r := range results {
+		if r.Err == nil {
+			successCount++
+		}
+	}
+	if successCount > 1 {
+		combined += "\n\n---\n\n> **注意**：请逐一审阅每位评审员的所有发现，即使某个问题只有一位评审员提出。不同模型有不同盲区，单独发现的问题往往更有价值。"
+	}
+
+	return combined
 }
