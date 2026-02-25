@@ -6,11 +6,14 @@ import (
 	"github.com/mark3labs/mcp-go/server"
 )
 
+// Version is set at build time via ldflags.
+var Version = "dev"
+
 // New creates a new MCP server with the quorum_review tool registered.
 func New(cfg *config.Config) *server.MCPServer {
 	s := server.NewMCPServer(
 		"quorum-cc",
-		"0.1.0",
+		Version,
 		server.WithToolCapabilities(true),
 	)
 

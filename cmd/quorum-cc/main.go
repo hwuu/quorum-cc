@@ -47,6 +47,7 @@ func newServeCmd() *cobra.Command {
 			if err := cfg.Validate(); err != nil {
 				return fmt.Errorf("invalid config: %w", err)
 			}
+			qserver.Version = version
 			return qserver.ServeStdio(cfg)
 		},
 	}

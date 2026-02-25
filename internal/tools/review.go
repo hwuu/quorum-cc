@@ -14,7 +14,7 @@ func NewReviewTool() mcp.Tool {
 	return mcp.NewTool("quorum_review",
 		mcp.WithDescription("将内容发送给 OpenCode 后端进行独立评审"),
 		mcp.WithString("content",
-			mcp.Description("待评审内容（代码、设计文档等）"),
+			mcp.Description("待评审内容（代码、设计文档等），或评审指令（如「评审最近的 git 变更」）。OpenCode 会自行读取文件、执行命令"),
 			mcp.Required(),
 		),
 		mcp.WithString("context",
@@ -25,7 +25,10 @@ func NewReviewTool() mcp.Tool {
 			mcp.DefaultString("all"),
 		),
 		mcp.WithString("file_path",
-			mcp.Description("文件路径，用于评审报告定位（可选）"),
+			mcp.Description("文件路径（可选），作为评审上下文提示"),
+		),
+		mcp.WithNumber("timeout",
+			mcp.Description("超时时间（秒）。覆盖 config 中的默认值。复杂评审建议设置 600-900"),
 		),
 	)
 }
@@ -50,7 +53,12 @@ func HandleReview(cfg *config.Config) func(ctx context.Context, request mcp.Call
 		}
 		filePath, _ := args["file_path"].(string)
 
-		result, err := dispatcher.Dispatch(ctx, cfg, content, ctxStr, filePath, backend)
+		var timeoutOverride int
+		if t, ok := args["timeout"].(float64); ok && t > 0 {
+			timeoutOverride = int(t)
+		}
+
+		result, err := dispatcher.Dispatch(ctx, cfg, content, ctxStr, filePath, backend, timeoutOverride)
 		if err != nil {
 			return mcp.NewToolResultError(fmt.Sprintf("review failed: %v", err)), nil
 		}

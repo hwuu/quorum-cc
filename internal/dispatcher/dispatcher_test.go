@@ -28,7 +28,7 @@ func testConfig() *config.Config {
 
 func TestDispatchOneUnknownBackend(t *testing.T) {
 	cfg := testConfig()
-	_, err := Dispatch(context.Background(), cfg, "code", "", "", "nonexistent")
+	_, err := Dispatch(context.Background(), cfg, "code", "", "", "nonexistent", 0)
 	if err == nil {
 		t.Fatal("expected error for unknown backend")
 	}
@@ -42,7 +42,7 @@ func TestDispatchNoBackends(t *testing.T) {
 		Version:  "1",
 		Backends: map[string]config.Backend{},
 	}
-	_, err := Dispatch(context.Background(), cfg, "code", "", "", "all")
+	_, err := Dispatch(context.Background(), cfg, "code", "", "", "all", 0)
 	if err == nil {
 		t.Fatal("expected error for no backends")
 	}
@@ -54,7 +54,7 @@ func TestDispatchNoBackends(t *testing.T) {
 func TestDispatchInvalidTemplate(t *testing.T) {
 	cfg := testConfig()
 	cfg.PromptTemplate = "{{.Invalid"
-	_, err := Dispatch(context.Background(), cfg, "code", "", "", "glm-5")
+	_, err := Dispatch(context.Background(), cfg, "code", "", "", "glm-5", 0)
 	if err == nil {
 		t.Fatal("expected error for invalid template")
 	}

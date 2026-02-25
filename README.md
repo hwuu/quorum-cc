@@ -35,7 +35,7 @@ curl -fsSL https://github.com/hwuu/quorum-cc/releases/latest/download/install.sh
 
 安装脚本会自动配置 bash/zsh 命令补全。
 
-或从 [Releases](https://github.com/hwuu/quorum-cc/releases) 下载对应平台二进制。
+或从 [Releases](https://github.com/hwuu/quorum-cc/releases) 下载对应平台二进制（支持 Linux/macOS，amd64/arm64）。
 
 ## 前置条件
 
@@ -64,26 +64,13 @@ quorum-cc init
 > 这是支付模块的核心函数，用 quorum 评审一下，重点关注并发安全
 ```
 
-### 查看状态
+### 命令一览
 
 ```bash
-quorum-cc status
-```
-
-### 测试连通性
-
-```bash
-quorum-cc test
-```
-
-逐个调用已配置的后端，验证端到端连通性。
-
-### 运维命令
-
-```bash
-quorum-cc version    # 显示版本信息
+quorum-cc init       # 检测环境、生成配置、注册 MCP Server
 quorum-cc status     # 检查 opencode、配置、MCP 注册状态
 quorum-cc test       # 逐个测试后端连通性
+quorum-cc version    # 显示版本信息
 quorum-cc serve      # 启动 MCP Server（由 Claude Code 自动调用，通常无需手动执行）
 ```
 
@@ -96,10 +83,10 @@ version: "1"
 backends:
   GLM-5:
     model: "siliconflow-cn/Pro/zai-org/GLM-5"
-    timeout: 300
+    timeout: 600
   MiniMax-M2.5:
     model: "siliconflow-cn/Pro/MiniMaxAI/MiniMax-M2.5"
-    timeout: 300
+    timeout: 600
 defaults:
   backend: "all"
 ```
@@ -112,7 +99,7 @@ defaults:
 backends:
   DeepSeek-V3:
     model: "siliconflow-cn/Pro/deepseek-ai/DeepSeek-V3"
-    timeout: 300
+    timeout: 600
 ```
 
 ### 自定义评审 Prompt

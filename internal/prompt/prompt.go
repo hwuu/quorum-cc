@@ -8,10 +8,7 @@ import (
 
 const defaultTemplate = `你是一位独立的代码评审员。请严格评审以下内容，不要客气。
 {{.ContextSection}}
-待评审内容：
-` + "```" + `
 {{.Content}}
-` + "```" + `
 
 请按以下结构输出：
 1. 总体评分 (1-10)

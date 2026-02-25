@@ -207,7 +207,7 @@ func buildConfig(models []string) *config.Config {
 		name := parts[len(parts)-1]
 		backends[name] = config.Backend{
 			Model:   model,
-			Timeout: 300,
+			Timeout: 600,
 		}
 	}
 	return &config.Config{
@@ -258,6 +258,7 @@ func registerMCP() error {
 	mcpServers["quorum-cc"] = map[string]any{
 		"command": qccPath,
 		"args":    []string{"serve"},
+		"description": "Multi-model code review via OpenCode backends",
 	}
 	claudeCfg["mcpServers"] = mcpServers
 

@@ -74,3 +74,29 @@ func TestBuildInvalidTemplate(t *testing.T) {
 		t.Error("expected error for invalid template")
 	}
 }
+
+func TestBuildFilePathOnly(t *testing.T) {
+	result, err := Build("", "评审 src/main.go", "", "src/main.go")
+	if err != nil {
+		t.Fatalf("Build: %v", err)
+	}
+	if !strings.Contains(result, "评审 src/main.go") {
+		t.Error("result should contain the instruction")
+	}
+	if !strings.Contains(result, "文件路径：src/main.go") {
+		t.Error("result should contain file path in context section")
+	}
+}
+
+func TestBuildContentTakesPrecedence(t *testing.T) {
+	result, err := Build("", "func bar() {}", "", "src/main.go")
+	if err != nil {
+		t.Fatalf("Build: %v", err)
+	}
+	if !strings.Contains(result, "func bar() {}") {
+		t.Error("result should contain content")
+	}
+	if !strings.Contains(result, "文件路径：src/main.go") {
+		t.Error("result should contain file path in context section")
+	}
+}
